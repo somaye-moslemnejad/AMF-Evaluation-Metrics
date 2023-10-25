@@ -1,7 +1,6 @@
 from app.matching import match
 import json
 from pycm import *
-
 class evaluation:
 
 
@@ -117,7 +116,6 @@ class evaluation:
         loc_ta_F1_macro = loc_ta_cm.F1_Macro
         prop_ya_an_F1_macro = prop_ya_cm.F1_Macro
 
-
         if match.check_none(s_node_F1_macro):
             s_node_F1_macro = 1.0
         if match.check_none(prop_rel_F1_macro):
@@ -137,29 +135,41 @@ class evaluation:
         return F1_macro
     #  accuracy 0-1
     @staticmethod
-    def accuracy_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm, prop_ya_cm):
+    def accuracy_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm,
+                             prop_ya_cm):
         # Get accuracy scores from confusion matrices for each category/class
-        s_node_accuracy = all_s_a_cm.Overall_ACC
-        prop_rel_accuracy = prop_rels_comp_cm.Overall_ACC
-        loc_rel_accuracy = loc_ya_rels_comp_cm.Overall_ACC
-        prop_ya_accuracy = prop_ya_comp_cm.Overall_ACC
-        loc_ta_accuracy = loc_ta_cm.Overall_ACC
-        prop_ya_an_accuracy = prop_ya_cm.Overall_ACC
+        s_node_accuracy = all_s_a_cm.ACC
+        prop_rel_accuracy = prop_rels_comp_cm.ACC
+        loc_rel_accuracy = loc_ya_rels_comp_cm.ACC
+        prop_ya_accuracy = prop_ya_comp_cm.ACC
+        loc_ta_accuracy = loc_ta_cm.ACC
+        prop_ya_an_accuracy = prop_ya_cm.ACC
 
 
-        # Handle cases where the accuracy is None
-        if match.check_none(s_node_accuracy):
-            s_node_accuracy = 1.0
-        if match.check_none(prop_rel_accuracy):
-            prop_rel_accuracy = 1.0
-        if match.check_none(loc_rel_accuracy):
-            loc_rel_accuracy = 1.0
-        if match.check_none(prop_ya_accuracy):
-            prop_ya_accuracy = 1.0
-        if match.check_none(loc_ta_accuracy):
-            loc_ta_accuracy = 1.0
-        if match.check_none(prop_ya_an_accuracy):
-            prop_ya_an_accuracy = 1.0
+        # Handle cases where accuracy is None
+        def handle_accuracy(acc_dict):
+            acc_dict = {k: v if v is not None else 1 for k, v in acc_dict.items()}
+            return acc_dict
+
+        s_node_accuracy = handle_accuracy(s_node_accuracy)
+        prop_rel_accuracy = handle_accuracy(prop_rel_accuracy)
+        loc_rel_accuracy = handle_accuracy(loc_rel_accuracy)
+        prop_ya_accuracy = handle_accuracy(prop_ya_accuracy)
+        loc_ta_accuracy = handle_accuracy(loc_ta_accuracy)
+        prop_ya_an_accuracy = handle_accuracy(prop_ya_an_accuracy)
+
+        # Calculate the average accuracy for each class
+        def calculate_average_accuracy(acc_dict):
+            values = list(acc_dict.values())
+            return sum(values) / len(values) if len(values) > 0 else 0
+
+        s_node_accuracy = calculate_average_accuracy(s_node_accuracy)
+        prop_rel_accuracy = calculate_average_accuracy(prop_rel_accuracy)
+        loc_rel_accuracy = calculate_average_accuracy(loc_rel_accuracy)
+        prop_ya_accuracy = calculate_average_accuracy(prop_ya_accuracy)
+        loc_ta_accuracy = calculate_average_accuracy(loc_ta_accuracy)
+        prop_ya_an_accuracy = calculate_average_accuracy(prop_ya_an_accuracy)
+
 
         score_list = [s_node_accuracy, prop_rel_accuracy, loc_rel_accuracy, prop_ya_accuracy, loc_ta_accuracy,
                       prop_ya_an_accuracy]
@@ -167,8 +177,6 @@ class evaluation:
         Accuracy = sum(score_list) / float(len(score_list))
 
         return Accuracy
-
-
 
     # U-Alpha range from 0 to 1
     @staticmethod
