@@ -37,8 +37,6 @@ class evaluation:
         prop_ya_dict = match.convert_to_dict(prop_ya_conf)
 
 
-
-
         # creating confusion matrix for s-nodes/YA/TA
         all_s_a_cm = ConfusionMatrix(matrix=all_s_a_dict)
         prop_rels_comp_cm = ConfusionMatrix(matrix=prop_rels_comp_dict)
@@ -46,6 +44,7 @@ class evaluation:
         prop_ya_comp_cm = ConfusionMatrix(matrix=prop_ya_comp_dict)
         loc_ta_cm = ConfusionMatrix(matrix=loc_ta_dict)
         prop_ya_cm = ConfusionMatrix(matrix=prop_ya_dict)
+
 
         return all_s_a_cm,prop_rels_comp_cm,loc_ya_rels_comp_cm,prop_ya_comp_cm,loc_ta_cm,prop_ya_cm
 
@@ -209,35 +208,6 @@ class evaluation:
 
         return u_alpha
 
-    # Gamma based on https://www.pycm.io/doc/index.html /https://aclanthology.org/J15-3003.pdf/https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/1471-2288-13-61/https://nces.ed.gov/FCSM/pdf/J4_Xie_2013FCSM.pdf
-    @staticmethod
-    def gamma_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm,
-                              prop_ya_cm):
-            # kappa calculation
-            s_node_gamma = all_s_a_cm.AC1
-            prop_rel_gamma = prop_rels_comp_cm.AC1
-            loc_rel_gamma = loc_ya_rels_comp_cm.AC1
-            prop_ya_gamma = prop_ya_comp_cm.AC1
-            loc_ta_gamma = loc_ta_cm.AC1
-            prop_ya_an_gamma = prop_ya_cm.AC1
-
-            if match.check_none(s_node_gamma):
-                s_node_gamma = 1.0
-            if match.check_none(prop_rel_gamma):
-                prop_rel_gamma = 1.0
-            if match.check_none(loc_rel_gamma):
-                loc_rel_gamma = 1.0
-            if match.check_none(prop_ya_gamma):
-                prop_ya_gamma = 1.0
-            if match.check_none(loc_ta_gamma):
-                loc_ta_gamma = 1.0
-            if match.check_none(prop_ya_an_gamma):
-                prop_ya_an_gamma = 1.0
-
-            score_list = [s_node_gamma, prop_rel_gamma, loc_rel_gamma, prop_ya_gamma, loc_ta_gamma, prop_ya_an_gamma]
-            gamma = sum(score_list) / float(len(score_list))
-
-            return gamma
 
 # Debugging
 
@@ -273,12 +243,6 @@ if __name__ == "__main__":
         U_Alpha= eval.u_alpha_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm,
                                    prop_ya_cm)
         print('U-Alpha', U_Alpha)
-
-        # Gamma
-        Gamma = eval.gamma_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm,
-                                           loc_ta_cm,
-                                           prop_ya_cm)
-        print('Gamma', Gamma)
 
 
 
