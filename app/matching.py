@@ -140,6 +140,7 @@ class match:
                     tag_text = str(tag)
 
                 words = tag_text.split()
+                print('2', words)
                 seg_len = len(words)
                 segment_list += seg_len * [boundary_counter]
         return segment_list
@@ -273,7 +274,7 @@ class match:
     def get_i_node_sim(g1, g2):
         g1_c = g1.copy()
         g2_c = g2.copy()
-        aifsim = Aifsim()
+        aifsim = match()
         g1_i_nodes, g1_not_i_nodes = aifsim.get_i_nodes(g1_c)
         new_g1 = aifsim.remove_nodes(g1_c, g1_not_i_nodes)
         g2_i_nodes, g2_not_i_nodes = aifsim.get_i_nodes(g2_c)
@@ -286,7 +287,7 @@ class match:
     def get_s_node_sim(g1, g2):
         g1_c = g1.copy()
         g2_c = g2.copy()
-        aifsim = Aifsim()
+        aifsim = match()
         g1_nodes, g1_not_nodes = aifsim.get_s_nodes(g1_c)
         new_g1 = aifsim.remove_nodes(g1_c, g1_not_nodes)
         g2_nodes, g2_not_nodes = aifsim.get_s_nodes(g2_c)
@@ -299,7 +300,7 @@ class match:
     def get_i_s_node_sim(g1, g2):
         g1_c = g1.copy()
         g2_c = g2.copy()
-        aifsim = Aifsim()
+        aifsim = match()
         g1_nodes, g1_not_nodes = aifsim.get_i_s_nodes(g1_c)
         new_g1 = aifsim.remove_nodes(g1_c, g1_not_nodes)
         g2_nodes, g2_not_nodes = aifsim.get_i_s_nodes(g2_c)
@@ -312,7 +313,7 @@ class match:
     def get_l_node_sim(g1, g2):
         g1_c = g1.copy()
         g2_c = g2.copy()
-        aifsim = Aifsim()
+        aifsim = match()
         g1_nodes, g1_not_nodes = aifsim.get_l_nodes(g1_c)
         new_g1 = aifsim.remove_nodes(g1_c, g1_not_nodes)
         g2_nodes, g2_not_nodes = aifsim.get_l_nodes(g2_c)
