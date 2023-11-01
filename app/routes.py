@@ -39,10 +39,6 @@ def get_data():
         acc = eval_metric.accuracy_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm,prop_ya_cm)
 
 
-        # Gamma
-        gamma = eval_metric.gamma_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm, prop_ya_cm)
-
-
         # U-Alpha
         u_alpha = eval_metric.u_alpha_calculation(all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm,prop_ya_cm)
 
@@ -53,7 +49,6 @@ def get_data():
             "CASS": cass,
             "Text Similarity":text_similarity,
             "U-Alpha": u_alpha,
-            "Gamma": gamma,
             "Kappa": kappa
           }
 

@@ -188,7 +188,6 @@ class evaluation:
         loc_ta_u_alpha = loc_ta_cm.Alpha
         prop_ya_an_u_alpha = prop_ya_cm.Alpha
 
-
         if match.check_none(s_node_u_alpha):
             s_node_u_alpha = 1.0
         if match.check_none(prop_rel_u_alpha):
