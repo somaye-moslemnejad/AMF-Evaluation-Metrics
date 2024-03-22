@@ -55,4 +55,5 @@ def get_data():
         return jsonify(results)
 
     elif request.method == 'GET':
+
         return render_template('docs.html')

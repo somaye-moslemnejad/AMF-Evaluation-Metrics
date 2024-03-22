@@ -11,8 +11,8 @@ class CorpusLoader:
         try:
             cast_timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
         except (ValueError, TypeError):
-            print('Failed datetime(timestamp) casting:')
-            print(timestamp)
+            # print('Failed datetime(timestamp) casting:')
+            # print(timestamp)
             cast_timestamp = timestamp
         return cast_timestamp
 

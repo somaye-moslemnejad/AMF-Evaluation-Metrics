@@ -1,3 +1,161 @@
+# from bs4 import BeautifulSoup
+# import segeval
+# from nltk.corpus import words
+# class match:
+#     @staticmethod
+#     def remove_html_tags(xml_soup):
+#         for match in xml_soup.findAll('div'):
+#             match.replaceWithChildren()
+#         for match in xml_soup.findAll('p'):
+#             match.replaceWithChildren()
+#         for match in xml_soup.findAll('br'):
+#             match.replaceWithChildren()
+#         # for match in xml_soup.findAll('span'):
+#         #     match.replaceWithChildren()
+#
+#         return xml_soup
+#
+#     @staticmethod
+#     def get_segements(xml_soup):
+#         segment_list = []
+#         word_list=[]
+#         if xml_soup.body:
+#             for i, tag in enumerate(xml_soup.body):
+#                 boundary_counter = i + 1
+#                 tag_text = ''
+#                 if 'span' in str(tag):
+#                     tag_text = tag.text
+#                 else:
+#                     tag_text = str(tag)
+#
+#                 words = tag_text.split()
+#                 seg_len = len(words)
+#                 # print(seg_len)
+#                 segment_list += seg_len * [boundary_counter]
+#                 word_list+=words
+#         else:
+#             for i, tag in enumerate(xml_soup):
+#                 boundary_counter = i + 1
+#                 tag_text = ''
+#                 if 'span' in str(tag):
+#                     tag_text = tag.text
+#                 else:
+#                     tag_text = str(tag)
+#
+#                 words = tag_text.split()
+#                 seg_len = len(words)
+#                 # print(seg_len)
+#                 segment_list += seg_len * [boundary_counter]
+#                 word_list += words
+#         return segment_list,word_list
+#
+#
+#     @staticmethod
+#     def check_segment_length(seg_1, word_1, seg_2, word_2):
+#         seg_1_len = len(seg_1)
+#         seg_2_len = len(seg_2)
+#
+#         if seg_1_len == seg_2_len:
+#             return True,seg_1,seg_2
+#         else:
+#
+#             if seg_1_len > seg_2_len:
+#                 for i in range(len(word_1) - 1):
+#                     if word_1[i] + word_1[i + 1] in word_2:
+#                         word_1[i:i + 2] = [word_1[i] + word_1[i + 1]]
+#
+#                         seg_1 = [seg_1[0]] * len(word_1)
+#                         if len(seg_1) == len(seg_2):
+#                              return True,seg_1,seg_2
+#                         # else:
+#                         #     return False, None, None
+#                 return False, None, None
+#
+#
+#             else:
+#                 for i in range(len(word_2) - 1):
+#                     if word_2[i] + word_2[i + 1] in word_1:
+#                         word_2[i:i + 2] = [word_2[i] + word_2[i + 1]]
+#                         seg_2 = [seg_2[0]] * len(word_2)
+#
+#                         if len(seg_1) == len(seg_2):
+#                             return True,seg_1,seg_2
+#                         # else:
+#                         #     return False, None, None
+#                 return False, None, None
+#
+#
+#
+#     @staticmethod
+#     def is_real_word(word1,word2):
+#         # Check if the word exists in the NLTK words corpus
+#         return word1.lower() in words.words()
+#
+#     @staticmethod
+#     def get_similarity(text_1, text_2):
+#         aifsim = match()
+#
+#         if text_1 == '' or text_2 == '':
+#             return 'Error: Text Input Is Empty'
+#         else:
+#             # Preprocess text to remove unwanted characters
+#             text_1 = aifsim.preprocess_text(text_1)
+#             text_2 = aifsim.preprocess_text(text_2)
+#
+#             # Parse text using BeautifulSoup
+#             xml_soup_1 = BeautifulSoup(text_1, features="lxml")
+#             xml_soup_2 = BeautifulSoup(text_2, features="lxml")
+#
+#             # Remove unwanted HTML tags
+#             xml_soup_1 = aifsim.remove_html_tags(xml_soup_1)
+#             # xml_soup_1 = BeautifulSoup(str(xml_soup_1), features="lxml").text
+#
+#             xml_soup_2 = aifsim.remove_html_tags(xml_soup_2)
+#             # xml_soup_2 = BeautifulSoup(str(xml_soup_2), features="lxml").text
+#             # Get segments
+#             segments_1,words_1 = aifsim.get_segements(xml_soup_1)
+#
+#             segments_2,words_2  = aifsim.get_segements(xml_soup_2)
+#
+#             # Check segment length
+#             seg_check,seg1,seg2 = aifsim.check_segment_length(segments_1,words_1, segments_2,words_2)
+#
+#             if not seg_check:
+#                 error_text = 'Error: Source Text Was Different as Segmentations differ in length'
+#                 return error_text
+#             else:
+#                 if seg1 == seg2:
+#                     ss = 1.0  # If segmentation sequences are identical, set similarity to maximum (1.0)
+#                 else:
+#                     # Convert segments to masses
+#                     masses_1 = segeval.convert_positions_to_masses(seg1)
+#
+#                     masses_2 = segeval.convert_positions_to_masses(seg2)
+#
+#                     # Calculate segmentation similarity
+#                     ss = segeval.segmentation_similarity(masses_1, masses_2)
+#
+#
+#                 return ss
+#
+#     @staticmethod
+#     def preprocess_text(text):
+#         # Remove unwanted characters
+#         text = text.replace("`", "").replace("’", "").replace("'", "").strip()
+#         text = text.replace("[", " [").replace("]", "] ").replace("...", " ").replace("…", " ")
+#         text = text.replace(".", " ").replace(",", " ").replace("!", " ").replace("?", " ")
+#         text = text.replace("  ", " ")
+#
+#         return text
+#
+#
+# # Example usage
+# text_1 = "<span>hello world to you</span> I"
+# text_2 = "<span>hello world to you</span>"
+# similarity_score = match.get_similarity(text_1, text_2)
+# print("Similarity score:", similarity_score)
+
+
 from app.centrality import Centrality
 import numpy as np
 from numpy import unravel_index
@@ -63,40 +221,33 @@ class match:
                 text_1 = text_1.replace("  ", " ")
                 text_2 = text_2.replace("  ", " ")
 
-                # Parse text using BeautifulSoup
-                xml_soup_1 = BeautifulSoup(text_1, features="lxml")
-                xml_soup_2 = BeautifulSoup(text_2, features="lxml")
+                xml_soup_1 = BeautifulSoup(text_1,features="lxml")
+                xml_soup_2 = BeautifulSoup(text_2,features="lxml")
 
-                # Remove unwanted HTML tags
                 xml_soup_1 = aifsim.remove_html_tags(xml_soup_1)
-                # xml_soup_1 = BeautifulSoup(str(xml_soup_1), features="lxml").text
-
                 xml_soup_2 = aifsim.remove_html_tags(xml_soup_2)
-                # xml_soup_2 = BeautifulSoup(str(xml_soup_2), features="lxml").text
-                # Get segments
-                segments_1, words_1 = aifsim.get_segements(xml_soup_1)
 
-                segments_2, words_2 = aifsim.get_segements(xml_soup_2)
+                segements_1 = aifsim.get_segements(xml_soup_1)
+                segements_2 = aifsim.get_segements(xml_soup_2)
 
-                # Check segment length
-                seg_check, seg1, seg2 = aifsim.check_segment_length(segments_1, words_1, segments_2, words_2)
-
+                seg_check = aifsim.check_segment_length(segements_1, segements_2)
                 if not seg_check:
-                    error_text = 'Error: Source Text Was Different as Segmentations differ in length'
+                    error_text='None:Error! Source Text Was Different as Segmentations differ in length'
                     return error_text
                 else:
-                    if seg1 == seg2:
-                        ss = 1.0  # If segmentation sequences are identical, set similarity to maximum (1.0)
-                    else:
-                        # Convert segments to masses
-                        masses_1 = segeval.convert_positions_to_masses(seg1)
 
-                        masses_2 = segeval.convert_positions_to_masses(seg2)
+                    masses_1 = segeval.convert_positions_to_masses(segements_1)
+                    masses_2 = segeval.convert_positions_to_masses(segements_2)
 
-                        # Calculate segmentation similarity
-                        ss = segeval.segmentation_similarity(masses_1, masses_2)
+                    ss = segeval.segmentation_similarity(masses_1, masses_2)
+                    ss = float(ss)
+                    pk = segeval.pk(masses_1, masses_2)
+                    pk = 1 - float(pk)
+                    win_diff = segeval.window_diff(masses_1, masses_2)
+                    win_diff = 1 - float(win_diff)
 
                     return ss
+
 
 
     @staticmethod
@@ -119,17 +270,12 @@ class match:
             match.replaceWithChildren()
         for match in xml_soup.findAll('br'):
             match.replaceWithChildren()
-        # new added
-        # for match in xml_soup.findAll('span'):
-        #     match.replaceWithChildren()
-        #
 
         return xml_soup
 
     @staticmethod
     def get_segements(xml_soup):
         segment_list = []
-        word_list = []
         if xml_soup.body:
             for i, tag in enumerate(xml_soup.body):
                 boundary_counter = i + 1
@@ -141,9 +287,7 @@ class match:
 
                 words = tag_text.split()
                 seg_len = len(words)
-                # print(seg_len)
                 segment_list += seg_len * [boundary_counter]
-                word_list += words
         else:
             for i, tag in enumerate(xml_soup):
                 boundary_counter = i + 1
@@ -154,56 +298,20 @@ class match:
                     tag_text = str(tag)
 
                 words = tag_text.split()
+                print('2', words)
                 seg_len = len(words)
-                # print(seg_len)
                 segment_list += seg_len * [boundary_counter]
-                word_list += words
-        return segment_list, word_list
+        return segment_list
 
     @staticmethod
-    def check_segment_length(seg_1, word_1, seg_2, word_2):
+    def check_segment_length(seg_1, seg_2):
         seg_1_len = len(seg_1)
         seg_2_len = len(seg_2)
 
         if seg_1_len == seg_2_len:
-            return True, seg_1, seg_2
+            return True
         else:
-
-            if seg_1_len > seg_2_len:
-                for i in range(len(word_1) - 1):
-                    if word_1[i] + word_1[i + 1] in word_2:
-                        word_1[i:i + 2] = [word_1[i] + word_1[i + 1]]
-
-                        seg_1 = [seg_1[0]] * len(word_1)
-                        if len(seg_1) == len(seg_2):
-                            return True, seg_1, seg_2
-                        # else:
-                        #     return False, None, None
-                return False, None, None
-
-
-            else:
-                for i in range(len(word_2) - 1):
-                    if word_2[i] + word_2[i + 1] in word_1:
-                        word_2[i:i + 2] = [word_2[i] + word_2[i + 1]]
-                        seg_2 = [seg_2[0]] * len(word_2)
-
-                        if len(seg_1) == len(seg_2):
-                            return True, seg_1, seg_2
-                        # else:
-                        #     return False, None, None
-                return False, None, None
-
-
-    # @staticmethod
-    # def check_segment_length(seg_1, seg_2):
-    #     seg_1_len = len(seg_1)
-    #     seg_2_len = len(seg_2)
-    #
-    #     if seg_1_len == seg_2_len:
-    #         return True
-    #     else:
-    #         return False
+            return False
 
     @staticmethod
     def get_normalized_edit_distance(g1, g2, label_equal, attr_name):
@@ -962,7 +1070,8 @@ class match:
     @staticmethod
     def prop_rels_comp(prop_matrix, graph1, graph2):
         aifsim = match()
-        conf_matrix = [[0, 0], [0, 0]]
+        conf_matrix = [[0, 0],[0, 0]]
+
 
         for rel_dict in prop_matrix:
             ID1 = rel_dict['ID1']
@@ -970,53 +1079,48 @@ class match:
             text1 = rel_dict['text1']
             text2 = rel_dict['text2']
 
+
             if ID1 != 0 and ID2 != 0:
 
                 ras1, cas1, mas1 = aifsim.count_s_nodes(ID1, graph1)
-
                 ras2, cas2, mas2 = aifsim.count_s_nodes(ID2, graph2)
 
+
                 if ras1 == ras2:
-                    conf_matrix[0][0] = conf_matrix[0][0] + 1
+                    conf_matrix[0][0] =  conf_matrix[0][0] + 1
                 elif ras1 > ras2:
-                    conf_matrix[1][0] = conf_matrix[1][0] + 1
+                    conf_matrix[1][0] =  conf_matrix[1][0] + 1
                 elif ras2 > ras1:
-                    conf_matrix[0][1] = conf_matrix[0][1] + 1
+                    conf_matrix[0][1] =  conf_matrix[0][1] + 1
 
                 if cas1 == cas2:
-                    conf_matrix[0][0] = conf_matrix[0][0] + 1
+                    conf_matrix[0][0] =  conf_matrix[0][0] + 1
                 elif cas1 > cas2:
-                    conf_matrix[1][0] = conf_matrix[1][0] + 1
+                    conf_matrix[1][0] =  conf_matrix[1][0] + 1
                 elif cas2 > cas1:
-                    conf_matrix[0][1] = conf_matrix[0][1] + 1
+                    conf_matrix[0][1] =  conf_matrix[0][1] + 1
 
                 if mas1 == mas2:
-                    conf_matrix[0][0] = conf_matrix[0][0] + 1
+                    conf_matrix[0][0] =  conf_matrix[0][0] + 1
                 elif mas1 > mas2:
-                    conf_matrix[1][0] = conf_matrix[1][0] + 1
+                    conf_matrix[1][0] =  conf_matrix[1][0] + 1
                 elif mas2 > mas1:
-                    conf_matrix[0][1] = conf_matrix[0][1] + 1
+                    conf_matrix[0][1] =  conf_matrix[0][1] + 1
             elif ID1 == 0 and ID2 == 0:
-                conf_matrix[1][1] = conf_matrix[1][1] + 1
+                conf_matrix[1][1] =  conf_matrix[1][1] + 1
             elif ID1 == 0:
-                conf_matrix[0][1] = conf_matrix[0][1] + 1
+                conf_matrix[0][1] =  conf_matrix[0][1] + 1
             elif ID2 == 0:
-                conf_matrix[1][0] = conf_matrix[1][0] + 1
+                conf_matrix[1][0] =  conf_matrix[1][0] + 1
 
         overallRelations = len(prop_matrix) * len(prop_matrix)
 
         total_agreed_none = overallRelations - conf_matrix[0][0] - conf_matrix[0][1] - conf_matrix[1][0]
 
-        # update
-        if total_agreed_none < 0:
-            total_agreed_none = 0
         conf_matrix[1][1] = total_agreed_none
 
-        #
-
-        # conf_matrix[1][1] = total_agreed_none
-
         return conf_matrix
+
     @staticmethod
     def count_s_nodes(node_id, graph):
         RA_count = 0

@@ -12,6 +12,9 @@ class evaluation:
         graph1,graph2= match.get_graphs(json1, json2)
         # creating proposition similarity matrix relations
         prop_rels = match.get_prop_sim_matrix(graph1, graph2)
+        # print(prop_rels)
+        # print('prop_rels',prop_rels)
+
         # creating locution similarity matrix relations
         loc_rels = match.get_loc_sim_matrix(graph1, graph2)
         # anchoring on s-nodes (RA/CA/MA) and combining them
@@ -22,7 +25,9 @@ class evaluation:
         all_s_a_dict = match.convert_to_dict(all_a)
         # propositional relation comparison
         prop_rels_comp_conf = match.prop_rels_comp(prop_rels,graph1, graph2)
+        # print('prop_rels_comp_conf',prop_rels_comp_conf)
         prop_rels_comp_dict = match.convert_to_dict(prop_rels_comp_conf)
+        # print('prop_rels_comp_dict',prop_rels_comp_dict)
        # getting all YAs anchored in Locutions
         loc_ya_rels_comp_conf = match.loc_ya_rels_comp(loc_rels, graph1, graph2)
         loc_ya_rels_comp_dict = match.convert_to_dict(loc_ya_rels_comp_conf)
@@ -86,6 +91,13 @@ class evaluation:
     def text_similarity(data1, data2):
         text1 = data1['text']
         text2 = data2['text']
+        # Check if text1 is a dictionary with 'txt' key
+        if isinstance(text1, dict) and 'txt' in text1:
+            text1 = text1['txt']
+
+        # Check if text2 is a dictionary with 'txt' key
+        if isinstance(text2, dict) and 'txt' in text2:
+            text2 = text2['txt']
         # Similarity between two texts
         ss = match.get_similarity(text1, text2)
         if ss == 'Error Text Input Is Empty' or ss == 'None:Error! Source Text Was Different as Segmentations differ in length':
@@ -99,7 +111,8 @@ class evaluation:
                 overall_sim='None'
             else:
 
-             overall_sim = (k_graph + text_sim_ss) / 2
+             # overall_sim = (k_graph + text_sim_ss) / 2
+             overall_sim = (float(k_graph) + float(text_sim_ss)) / 2
 
             return overall_sim
 
@@ -212,9 +225,9 @@ class evaluation:
 
 if __name__ == "__main__":
         eval=evaluation()
-        file1 = open('../28037.json', 'r')
+        file1 = open('../28111_mistake.json', 'r')
         data1 = json.load(file1)
-        file2 = open('../28111.json', 'r')
+        file2 = open('../28037.json', 'r')
         data2 = json.load(file2)
         # Kappa
         all_s_a_cm, prop_rels_comp_cm, loc_ya_rels_comp_cm, prop_ya_comp_cm, loc_ta_cm, prop_ya_cm=eval.matching_calculation(data1,data2)
