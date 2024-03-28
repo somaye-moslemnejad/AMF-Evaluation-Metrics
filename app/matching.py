@@ -75,11 +75,15 @@ class match:
                 # xml_soup_2 = BeautifulSoup(str(xml_soup_2), features="lxml").text
                 # Get segments
                 segments_1, words_1 = aifsim.get_segements(xml_soup_1)
+                # print(words_1)
 
                 segments_2, words_2 = aifsim.get_segements(xml_soup_2)
+                # print(words_2)
 
                 # Check segment length
                 seg_check, seg1, seg2 = aifsim.check_segment_length(segments_1, words_1, segments_2, words_2)
+                # print(seg1)
+                # print(seg2)
 
                 if not seg_check:
                     error_text = 'Error: Source Text Was Different as Segmentations differ in length'
@@ -162,37 +166,67 @@ class match:
 
     @staticmethod
     def check_segment_length(seg_1, word_1, seg_2, word_2):
+
         seg_1_len = len(seg_1)
+
         seg_2_len = len(seg_2)
 
-        if seg_1_len == seg_2_len:
+        for i in range(len(word_1) - 1):
+            if i + 1 < len(word_1) and word_1[i] + word_1[i + 1] in word_2:
+                word_1[i:i + 2] = [word_1[i] + word_1[i + 1]]
+                seg_1_at_i = seg_1[i]  # Segment number at position i in seg_1
+                seg_1[i:i + 2] = [seg_1_at_i]
+
+
+        for i in range(len(word_2) - 1):
+            if i + 1 < len(word_2) and word_2[i] + word_2[i + 1] in word_1:
+                word_2[i:i + 2] = [word_2[i] + word_2[i + 1]]
+                seg_2_at_i = seg_2[i]  # Segment number at position i in seg_1
+                seg_2[i:i + 2] = [seg_2_at_i]
+                print("new2", word_2)
+
+
+
+        if len(seg_1) == len(seg_2):
             return True, seg_1, seg_2
         else:
+            return False, None, None
 
-            if seg_1_len > seg_2_len:
-                for i in range(len(word_1) - 1):
-                    if word_1[i] + word_1[i + 1] in word_2:
-                        word_1[i:i + 2] = [word_1[i] + word_1[i + 1]]
-
-                        seg_1 = [seg_1[0]] * len(word_1)
-                        if len(seg_1) == len(seg_2):
-                            return True, seg_1, seg_2
-                        # else:
-                        #     return False, None, None
-                return False, None, None
-
-
-            else:
-                for i in range(len(word_2) - 1):
-                    if word_2[i] + word_2[i + 1] in word_1:
-                        word_2[i:i + 2] = [word_2[i] + word_2[i + 1]]
-                        seg_2 = [seg_2[0]] * len(word_2)
-
-                        if len(seg_1) == len(seg_2):
-                            return True, seg_1, seg_2
-                        # else:
-                        #     return False, None, None
-                return False, None, None
+    # @staticmethod
+    # def check_segment_length(seg_1, word_1, seg_2, word_2):
+    #     seg_1_len = len(seg_1)
+    #     seg_2_len = len(seg_2)
+    #
+    #     if seg_1_len == seg_2_len:
+    #         return True, seg_1, seg_2
+    #     else:
+    #
+    #         if seg_1_len > seg_2_len:
+    #             for i in range(len(word_1) - 1):
+    #                 if word_1[i] + word_1[i + 1] in word_2:
+    #                     word_1[i:i + 2] = [word_1[i] + word_1[i + 1]]
+    #
+    #
+    #                     seg_1 = [seg_1[0]] * len(word_1)
+    #                     if len(seg_1) == len(seg_2):
+    #                         return True, seg_1, seg_2
+    #                     # else:
+    #                     #     return False, None, None
+    #             return False, None, None
+    #
+    #
+    #         else:
+    #             for i in range(len(word_2) - 1):
+    #                 if word_2[i] + word_2[i + 1] in word_1:
+    #                     word_2[i:i + 2] = [word_2[i] + word_2[i + 1]]
+    #
+    #                     seg_2 = [seg_2[0]] * len(word_2)
+    #
+    #                     if len(seg_1) == len(seg_2):
+    #                         return True, seg_1, seg_2
+    #                     # else:
+    #                     #     return False, None, None
+    #             return False, None, None
 
 
     # @staticmethod
