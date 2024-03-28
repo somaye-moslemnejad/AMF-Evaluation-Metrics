@@ -100,7 +100,8 @@ class match:
                         # Calculate segmentation similarity
                         ss = segeval.segmentation_similarity(masses_1, masses_2)
 
-                    return ss
+
+                    return float(ss)
 
 
     @staticmethod
